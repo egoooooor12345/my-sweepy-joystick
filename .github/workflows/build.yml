@@ -4,25 +4,23 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: zmkfirmware/zmk-build-arm:3.2
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       
     - name: Build Left Half
-      uses: docker://zmkfirmware/zmk-build-arm:3.2
-      with:
-        args: |
-          west init -l /github/workspace/config
-          west build -b nice_nano_v2 -- -DSHIELD=sweepy_left -DZMK_CONFIG=/github/workspace/config
-          cp build/zephyr/zmk.uf2 /github/workspace/left.uf2
+      run: |
+        west init -l ./config
+        west build -b nice_nano_v2 -- -DSHIELD=sweepy_left -DZMK_CONFIG=./config
+        cp build/zephyr/zmk.uf2 left.uf2
         
-    - name: Build Right Half  
-      uses: docker://zmkfirmware/zmk-build-arm:3.2
-      with:
-        args: |
-          west init -l /github/workspace/config
-          west build -b nice_nano_v2 -- -DSHIELD=sweepy_right -DZMK_CONFIG=/github/workspace/config
-          cp build/zephyr/zmk.uf2 /github/workspace/right.uf2
+    - name: Build Right Half
+      run: |
+        west init -l ./config  
+        west build -b nice_nano_v2 -- -DSHIELD=sweepy_right -DZMK_CONFIG=./config
+        cp build/zephyr/zmk.uf2 right.uf2
         
     - name: Upload Firmware
       uses: actions/upload-artifact@v4
