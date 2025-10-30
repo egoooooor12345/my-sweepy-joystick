@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       
     - name: Build Left Half
       uses: docker://zmkfirmware/zmk-build-arm:3.2
@@ -25,7 +25,7 @@ jobs:
           cp build/zephyr/zmk.uf2 /github/workspace/right.uf2
         
     - name: Upload Firmware
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: firmware
         path: |
